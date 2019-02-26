@@ -1,3 +1,4 @@
+(function(ADL) {
 // adds toISOString to date objects if not there
 // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
 if ( !Date.prototype.toISOString ) {
@@ -83,7 +84,6 @@ function isDate(date) {
 }
 
 (function (ADL) {
-
     log.debug = false;
 
     function getByteLen(normal_val) {
@@ -103,7 +103,7 @@ function isDate(date) {
         return byteLen;
     }
 
-    /*
+    /**
      * Config object used w/ url params to configure the lrs object
      * change these to match your lrs
      * @return {object} config object
@@ -138,7 +138,7 @@ function isDate(date) {
         return conf
     }();
 
-    /*
+    /**
      * XAPIWrapper Constructor
      * @param {object} config   with a minimum of an endoint property
      * @param {boolean} verifyxapiversion   indicating whether to verify the version of the LRS is compatible with this wrapper
@@ -165,8 +165,7 @@ function isDate(date) {
 
         function getbase(url)
         {
-            var l = document.createElement("a");
-            l.href = url;
+            var l = parseUrl(url);
             if (l.protocol && l.host) {
                 return l.protocol + "//" + l.host;
             } else if (l.href) {
@@ -184,7 +183,7 @@ function isDate(date) {
 
         if (verifyxapiversion && testConfig.call(this))
         {
-            window.ADL.XHR_request(this.lrs, this.lrs.endpoint+"about", "GET", null, null,
+            ADL.XHR_request(this.lrs, this.lrs.endpoint+"about", "GET", null, null,
                 function(r){
                     if(r.status == 200)
                     {
@@ -262,7 +261,7 @@ function isDate(date) {
     // This wrapper is based on the Experience API Spec version:
     XAPIWrapper.prototype.xapiVersion = "1.0.1";
 
-    /*
+    /**
      * Adds info from the lrs object to the statement, if available.
      * These values could be initialized from the Config object or from the url query string.
      * @param {object} stmt   the statement object
@@ -306,7 +305,7 @@ function isDate(date) {
     // Default encoding
     XAPIWrapper.prototype.defaultEncoding = 'utf-8';
 
-    /*
+    /**
      * Send a single statement to the LRS. Makes a Javascript object
      * with the statement id as 'id' available to the callback function.
      * @param {object} stmt   statement object to send
@@ -380,7 +379,7 @@ function isDate(date) {
         return new TextDecoder(encoding).decode(content);
     };
 
-    /*
+    /**
     * Build the post body to include the multipart boundries, edit the statement to include the attachment types
     * extraHeaders should be an object. It will have the multipart boundary value set
     * attachments should be an array of objects of the type
@@ -458,7 +457,7 @@ function isDate(date) {
 
         return new Blob(blobParts);
     }
-    /*
+    /**
      * Send a list of statements to the LRS.
      * @param {array} stmtArray   the list of statement objects to send
      * @param {function} [callback]   function to be called after the LRS responds
@@ -503,7 +502,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Get statement(s) based on the searchparams or more url.
      * @param {object} searchparams   an ADL.XAPIWrapper.searchParams object of
      *                key(search parameter)-value(parameter value) pairs.
@@ -573,7 +572,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Gets the Activity object from the LRS.
      * @param {string} activityid   the id of the Activity to get
      * @param {function} [callback]   function to be called after the LRS responds
@@ -611,7 +610,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Store activity state in the LRS
      * @param {string} activityid   the id of the Activity this state is about
      * @param {object} agent   the agent this Activity state is related to
@@ -693,7 +692,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Get activity state from the LRS
      * @param {string} activityid   the id of the Activity this state is about
      * @param {object} agent   the agent this Activity state is related to
@@ -756,7 +755,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Delete activity state in the LRS
      * @param {string} activityid   the id of the Activity this state is about
      * @param {object} agent   the agent this Activity state is related to
@@ -833,7 +832,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Store activity profile in the LRS
      * @param {string} activityid   the id of the Activity this profile is about
      * @param {string} profileid   the id you want associated with this profile
@@ -905,7 +904,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Get activity profile from the LRS
      * @param {string} activityid   the id of the Activity this profile is about
      * @param {string} [profileid]    the id of the profile, if not included, the response will be a list of profileids
@@ -961,7 +960,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Delete activity profile in the LRS
      * @param {string} activityid   the id of the Activity this profile is about
      * @param {string} profileid   the id you want associated with this profile
@@ -1018,7 +1017,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Gets the Person object from the LRS based on an agent object.
      * The Person object may contain more information about an agent.
      * See the xAPI Spec for details.
@@ -1058,7 +1057,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Store agent profile in the LRS
      * @param {object} agent   the agent this profile is related to
      * @param {string} profileid   the id you want associated with this profile
@@ -1130,7 +1129,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Get agnet profile from the LRS
      * @param {object} agent   the agent associated with this profile
      * @param {string} [profileid]    the id of the profile, if not included, the response will be a list of profileids
@@ -1186,7 +1185,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Delete agent profile in the LRS
      * @param {oject} agent   the id of the Agent this profile is about
      * @param {string} profileid   the id you want associated with this profile
@@ -1243,7 +1242,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Tests the configuration of the lrs object
      */
     function testConfig()
@@ -1346,7 +1345,7 @@ function isDate(date) {
     {
         var qs, pairs, pair, ii, parsed;
 
-        qs = window.location.search.substr(1);
+        qs = location.search.substr(1);
 
         pairs = qs.split('&');
         parsed = {};
@@ -1364,12 +1363,111 @@ function isDate(date) {
     function delay()
     {
         var xhr = new XMLHttpRequest();
-        var url = window.location + '?forcenocache='+ADL.ruuid();
+        var url = location + '?forcenocache='+ADL.ruuid();
         xhr.open('GET', url, false);
         xhr.send(null);
     }
 
-    /*
+    var isNode = Boolean(!root.document);
+
+    // Node shim for browser location
+    var location = isNode ?
+        // Node
+        {
+            search: "",
+            protocol: "https:"
+        } :
+        // Browser
+        root.location;
+    /**
+     * Cross environment implementation of a url parser
+     * @param  {string} url  Url to parse
+     * @return {object}  Parsed url
+     */
+    function parseUrl(url) {
+        // Node
+        if (isNode) return require("url").parse(url);
+
+        // Brower
+        var a = document.createElement("a");
+        a.href = url;
+        return a;
+    }
+
+    // If in node, create a loose SHIM for XMLHttpRequest API
+    var XMLHttpRequest = root.XMLHttpRequest;
+    isNode && (function() {
+        XMLHttpRequest = function XMLHttpRequest() {
+            this.method = "GET";
+            this.url = null;
+            this.async = true;
+            this.headers = {};
+        };
+        XMLHttpRequest.prototype = {
+
+            open: function(method, url, async)
+            {
+
+                if (async === false) {
+                    throw "ADL xAPIWrapper does not support synchronous http requests in node";
+                }
+
+                this.method = method;
+                this.url = url;
+                this.withCredentials = true;
+                this.crossDomain = true;
+                this.responseText = "";
+                this.responseJSON = null;
+                this.readyState = 0;
+                this.status = 0;
+                this.onreadystatechange = function() {};
+                this.onerror = function(error) {};
+                this.onload = function() {};
+            },
+
+            setRequestHeader: function(name, value)
+            {
+                this.headers[name] = value;
+            },
+
+            send: function(data)
+            {
+                var http = this.url.includes("https:") ? require('https') : require("http");
+                var options = {
+                    method: this.method,
+                    headers: this.headers
+                };
+                var parsedUrl = parseUrl(this.url);
+                for (var k in parsedUrl) {
+                    options[k] = parsedUrl[k];
+                }
+                var req = http.request(options, function (res) {
+                    res.setEncoding('utf8');
+                    this.status = res.statusCode;
+                    res.on('data', function (d) {
+                        this.responseText+=d;
+                    }.bind(this));
+                    res.on('end', function () {
+                        this.readyState = 4;
+                        try {
+                            this.responseJSON = JSON.parse(this.responseText);
+                        } catch(error) {
+                            this.responseJSON = null;
+                        }
+                        this.onload();
+                    }.bind(this));
+                }.bind(this));
+                req.on('error', function (e) {
+                    this.readyState = 4;
+                    this.onerror();
+                }.bind(this));
+                req.end(data);
+            }
+
+        };
+
+     })();
+    /**
      * formats a request in a way that IE will allow
      * @param {string} method   the http request method (ex: "PUT", "GET")
      * @param {string} url   the url to the request (ex: ADL.XAPIWrapper.lrs.endpoint + "statements")
@@ -1428,7 +1526,7 @@ function isDate(date) {
         });
     };
 
-    /*
+    /**
      * dateFromISOString
      * parses an ISO string into a date object
      * isostr - the ISO string
@@ -1463,7 +1561,7 @@ function isDate(date) {
     };
 
     // Synchronous if callback is not provided (not recommended)
-    /*
+    /**
      * makes a request to a server (if possible, use functions provided in XAPIWrapper)
      * @param {string} lrs   the lrs connection info, such as endpoint, auth, etc
      * @param {string} url   the url of this request
@@ -1489,7 +1587,6 @@ function isDate(date) {
             ieXDomain = false,
             ieModeRequest,
             urlparts = url.toLowerCase().match(/^(.+):\/\/([^:\/]*):?(\d+)?(\/.*)?$/),
-            location = window.location,
             urlPort,
             result,
             extended,
@@ -1527,7 +1624,7 @@ function isDate(date) {
         }
 
         //If it's not cross domain or we're not using IE, use the usual XmlHttpRequest
-        var windowsVersionCheck = window.XDomainRequest && (window.XMLHttpRequest && new XMLHttpRequest().responseType === undefined);
+        var windowsVersionCheck = root.XDomainRequest && (root.XMLHttpRequest && new XMLHttpRequest().responseType === undefined);
         if (!xDomainRequest || windowsVersionCheck === undefined || windowsVersionCheck===false) {
             xhr = new XMLHttpRequest();
             xhr.withCredentials = withCredentials; //allow cross domain cookie based auth
@@ -1616,7 +1713,7 @@ function isDate(date) {
         }
     };
 
-    /*
+    /**
      * Holder for custom global error callback
      * @param {object} xhr   xhr object or null
      * @param {string} method   XMLHttpRequest request method
@@ -1666,4 +1763,4 @@ function isDate(date) {
 
     ADL.XAPIWrapper = new XAPIWrapper(Config, false);
 
-}(window.ADL = window.ADL || {}));
+})(window.ADL = window.ADL || {});
